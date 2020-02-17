@@ -2,13 +2,19 @@ class CalcController{
  
     constructor(){
 
-        /* Declarando os atributos */
-        this._displayCalc = "0"; //_ é o private, uma convensão
-        this._dataAtual;
+        /* Attributes */
+        this._displayCalc = "0"; //_ Underline is the private convention
+        this._currentDate;
+        this.initialize;
 
     }
     
-    /* Getters e Setters */
+    /* Main Method */
+    initialize(){
+        
+    }
+
+    /* Getters and Setters */
 
     get displayCalc(){
         return this._displayCalc;
@@ -19,11 +25,11 @@ class CalcController{
     }
 
     get dataAtual(){
-        return this._dataAtual;
+        return this._currentDate;
     }
 
     set dataAtual(data){
-        this._dataAtual = data;
+        this._currentDate = data;
     }
 
 }
