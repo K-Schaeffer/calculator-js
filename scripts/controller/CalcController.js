@@ -3,8 +3,12 @@ class CalcController{
     constructor(){
 
         /* Attributes */
-        this._displayCalc = "0"; //_ Underline is the private convention
-        this._currentDate;
+
+        /* Selecting the display features */
+        this._displayCalcEl = document.querySelector("#display"); // El = Element
+        this._dateEl = document.querySelector("#data");
+        this._timeEl = document.querySelector("#hora");
+        this._currentDate; // _ is the convention to "Private"
         this.initialize();
 
     }
@@ -12,34 +16,49 @@ class CalcController{
     /* Main Method */
     initialize(){
         
-        /* Selecting the display features */
-        let displayCalcEl = document.querySelector("#display"); // El = Element
-        let dateEl = document.querySelector("#data");
-        let timeEl = document.querySelector("#hora");
-
-        // DOM properties to input in HTML format
-        displayCalcEl.innerHTML = "Display"; 
-        dateEl.innerHTML = "18/02/2020"; 
-        timeEl.innerHTML = "10:30"; 
+        // DOM properties to input in HTML format (Not used because of the getters and setters)
+        /**this._timeEl.innerHTML = "00:00"; 
+         * this._dateEl.innerHTML = "00/00/0000"; 
+         */
     
+         
+
+
     }
 
     /* Getters and Setters */
 
+
+    get displayTime(){
+        return this._dateEl.innerHTML;
+    }
+
+    set displayTime(value){
+        this._dateEl.innerHTML = value;
+    }
+
+    get displayDate(){
+        return this._timeEl.innerHTML;
+    }
+
+    set displayDate(value){
+        this._timeEl.innerHTML = value;
+    }
+
     get displayCalc(){
-        return this._displayCalc;
+        return this._displayCalcEl.innerHTML;
     }
 
-    set dislpayCalc(valor){
-        this._dislpayCalc = valor; 
+    set displayCalc(value){
+        this._displayCalcEl.innerHTML = value; 
     }
 
-    get dataAtual(){
-        return this._currentDate;
+    get currentDate(){
+        return new Date();
     }
 
-    set dataAtual(data){
-        this._currentDate = data;
+    set currentDate(date){
+        this._currentDate = date;
     }
 
 }
