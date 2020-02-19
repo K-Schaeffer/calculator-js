@@ -27,15 +27,30 @@ class CalcController {
 
     }
 
+    addEventListenerAll(element, events, fn){
+        
+        events.split(' ').forEach(event =>{
+
+            element.addEventListener(event, fn, false); //The false is to make the click count once
+
+        })
+
+    }
+
     initButtonsEvents() {
 
         let buttons = document.querySelectorAll("#buttons > g, #parts > g"); // take all the tags g which are sons of buttons (Same with parts)
 
         buttons.forEach(btn => { //If I add more parameters I'll have to put it inside the ()
 
-            btn.addEventListener('click', e => { // e = parameter
+            this.addEventListenerAll(btn, 'click drag mouseover', e => { //AddEventListenerAll its a method of the class
                 console.log(btn.className.baseVal.replace("btn-","")); //Taking the className and the baseValue and "removing" the btn (I put nothing in its place)
-            })
+            });
+
+            this.addEventListenerAll(btn, "mouseover mouseup mousedown", e => {
+                btn.style.cursor = "pointer"; //Adding the cursor style functionality
+            });
+
         })
 
     }
