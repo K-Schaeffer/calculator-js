@@ -11,6 +11,7 @@ class CalcController {
         /* End of display features */
         this._currentDate; // _ is the convention to "Private"
         this.initialize();
+        this.initButtonsEvents();
 
     }
 
@@ -26,8 +27,22 @@ class CalcController {
 
     }
 
+    initButtonsEvents() {
+
+        let buttons = document.querySelectorAll("#buttons > g, #parts > g"); // take all the tags g which are sons of buttons (Same with parts)
+
+        buttons.forEach(btn => { //If I add more parameters I'll have to put it inside the ()
+
+            btn.addEventListener('click', e => { // e = parameter
+                console.log(btn.className.baseVal.replace("btn-","")); //Taking the className and the baseValue and "removing" the btn (I put nothing in its place)
+            })
+        })
+
+    }
+
+
     setDisplayDateTime() {
-        this.displayDate = this.currentDate.toLocaleDateString(this._locale,{
+        this.displayDate = this.currentDate.toLocaleDateString(this._locale, {
             day: "2-digit",
             month: "long",
             year: "numeric"
