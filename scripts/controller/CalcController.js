@@ -71,18 +71,30 @@ class CalcController {
 
     }
 
-    calc(){
+    calc() {
 
         let lastOperator = this._operation.pop(); //Removing the last one (the 4th)
 
         let result = eval(this._operation.join("")); //Making the calc of the elements
         this._operation = [result, lastOperator]; //Inputing the last operator and the result
+        this.setLastNumberToDisplay(result);
 
     }
 
-    /*setLastNumberToDisplay(){
+    setLastNumberToDisplay() {
 
-    }*/
+        let lastNumber;
+
+        for (let i = this._operation.length - 1; i >= 0; i--) { //Going through the array to take the numbers
+            if(!this.isOperator(this._operation[i])){ //If is not a operator...
+                lastNumber = this._operation[i];
+                break;
+            }
+        }
+
+        this.displayCalc = lastNumber;
+
+    }
 
     addOperation(value) {
 
@@ -97,6 +109,7 @@ class CalcController {
             } else {
                 // It's a number, but its likely the first in the array
                 this.pushOperation(value);
+                this.setLastNumberToDisplay();
             }
         } else {
             //If to deal with the operator in the case of the last item be a numbe (So it became a new index)
