@@ -87,7 +87,7 @@ class CalcController {
         let last = '';
         this._lastOperator = this.getLastItem(); //True is default
 
-        if(this._operation.length < 3){
+        if (this._operation.length < 3) {
 
             let firstNumber = this._operation[0];
             this._operation = [firstNumber, this._lastOperator, this._lastNumber];
@@ -137,7 +137,7 @@ class CalcController {
 
         }
 
-        if(!lastItem){ //If we didn't find a lastItem
+        if (!lastItem) { //If we didn't find a lastItem
             lastItem = (isOperator) ? this._lastOperator : this._lastNumber; //Is there any operator?
         }
         return lastItem;
@@ -163,9 +163,6 @@ class CalcController {
             if (this.isOperator(value)) {
                 // If is a operator: Change it
                 this.setLastOperation(value);
-            } else if (isNaN(value)) {
-                //Other buttons (= .)
-                console.log('Other thing', value);
             } else {
                 // It's a number, but its likely the first in the array
                 this.pushOperation(value);
@@ -178,7 +175,7 @@ class CalcController {
             } else {
                 //Number
                 let newValue = this.getLastOperation().toString() + value.toString(); // Grouping the numbers
-                this.setLastOperation(parseInt(newValue));
+                this.setLastOperation(parseFloat(newValue));
 
                 this.setLastNumberToDisplay();
             }
@@ -187,6 +184,21 @@ class CalcController {
 
     setError() {
         this.displayCalc = "Error";
+    }
+
+    addDot(){
+
+        let lastOperation = this.getLastOperation();
+        console.log(lastOperation);
+
+        if(this.isOperator(lastOperation) || !lastOperation){ //If its undefined or a operation add "0.something"
+            this.pushOperation('0.');
+        }else{
+            this.setLastOperation(lastOperation.toString() + '.'); //Ading the . after the last number
+        }
+
+        this.setLastNumberToDisplay();
+
     }
 
     execBtn(value) {
@@ -216,7 +228,7 @@ class CalcController {
                 this.calc();
                 break;
             case 'ponto':
-                this.addOperation('.');
+                this.addDot('.');
                 break;
             case '0':
             case '1':
