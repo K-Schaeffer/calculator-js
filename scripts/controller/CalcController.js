@@ -43,6 +43,8 @@ class CalcController {
 
     clearAll() {
         this._operation = []; //Restarting the array
+        this._lastNumber = '';
+        this._lastOperator = '';
         this.setLastNumberToDisplay();
     }
 
