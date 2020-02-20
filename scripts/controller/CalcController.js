@@ -175,7 +175,7 @@ class CalcController {
             } else {
                 //Number
                 let newValue = this.getLastOperation().toString() + value.toString(); // Grouping the numbers
-                this.setLastOperation(parseFloat(newValue));
+                this.setLastOperation(newValue);
 
                 this.setLastNumberToDisplay();
             }
@@ -189,7 +189,10 @@ class CalcController {
     addDot(){
 
         let lastOperation = this.getLastOperation();
-        console.log(lastOperation);
+
+        if( typeof lastOperation == 'string' && lastOperation.split('').indexOf('.' > -1)){ //Is it a string? / Is there any dot?
+            return;
+        }
 
         if(this.isOperator(lastOperation) || !lastOperation){ //If its undefined or a operation add "0.something"
             this.pushOperation('0.');
