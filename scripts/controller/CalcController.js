@@ -5,6 +5,8 @@ class CalcController {
         /* Attributes */
         this._operation = []; //Array of operations
         this._locale = 'pt-BR';
+        this._lastOperator = '';
+        this._lastNumber = '';
         /* Selecting the display features */
         this._displayCalcEl = document.querySelector("#display"); // El = Element
         this._dateEl = document.querySelector("#data");
@@ -74,23 +76,43 @@ class CalcController {
 
     }
 
+    getResult() {
+        return eval(this._operation.join(""));
+    }
+
     calc() {
 
         let last = '';
+        this._lastOperator = this.getLastItem(); //True is default
 
-        if(this._operation.length > 3){
-            last = this._operation.pop(); //Removing the last one (the 4th)
+        if(this._operation.length < 3){
+
+            let firstNumber = this._operation[0];
+            this._operation = [firstNumber, this._lastOperator, this._lastNumber];
+
         }
 
-        let result = eval(this._operation.join("")); //Making the calc of the elements
+        if (this._operation.length > 3) {
+
+            last = this._operation.pop(); //Removing the last one (the 4th)
+            this._lastNumber = this.getResult(); //Making the calc so I can storage the result
+
+        } else
+            if (this._operation.length == 3) {
+
+                this._lastNumber = this.getLastItem(false);
+
+            }
+
+        let result = this.getResult(); //Making the calc of the elements
 
         if (last == '%') {
             result /= 100;
-            this._operation = [result]; 
+            this._operation = [result];
         } else {
             this._operation = [result]; //Inputing the the result
 
-            if(last){ 
+            if (last) {
                 this._operation.push(last);
             }
 
@@ -100,18 +122,31 @@ class CalcController {
 
     }
 
-    setLastNumberToDisplay() {
+    getLastItem(isOperator = true) {
 
-        let lastNumber;
+        let lastItem;
 
-        for (let i = this._operation.length - 1; i >= 0; i--) { //Going through the array to take the numbers
-            if (!this.isOperator(this._operation[i])) { //If is not a operator...
-                lastNumber = this._operation[i];
+        for (let i = this._operation.length - 1; i >= 0; i--) { //Going through the array to take items
+
+            if (this.isOperator(this._operation[i]) == isOperator) { //If it's a operator it will return operator (true) 
+                lastItem = this._operation[i];                       //on the contrary it will return the last number
                 break;
             }
+
         }
 
-        if(!lastNumber) {
+        if(!lastItem){ //If we didn't find a lastItem
+            lastItem = (isOperator) ? this._lastOperator : this._lastNumber; //Is there any operator?
+        }
+        return lastItem;
+
+    }
+
+    setLastNumberToDisplay() {
+
+        let lastNumber = this.getLastItem(false);
+
+        if (!lastNumber) {
             lastNumber = 0;
         }
 
