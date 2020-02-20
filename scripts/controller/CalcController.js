@@ -26,6 +26,7 @@ class CalcController {
             this.setDisplayDateTime();
         }, 1000); // ...during this. (1000ms = 1s)
 
+        this.setLastNumberToDisplay();
     }
 
     addEventListenerAll(element, events, fn) {
@@ -40,10 +41,12 @@ class CalcController {
 
     clearAll() {
         this._operation = []; //Restarting the array
+        this.setLastNumberToDisplay();
     }
 
     clearEntry() {
         this._operation.pop(); //Cleaning the last array item
+        this.setLastNumberToDisplay();
     }
 
     getLastOperation() {
@@ -73,10 +76,26 @@ class CalcController {
 
     calc() {
 
-        let lastOperator = this._operation.pop(); //Removing the last one (the 4th)
+        let last = '';
+
+        if(this._operation.length > 3){
+            last = this._operation.pop(); //Removing the last one (the 4th)
+        }
 
         let result = eval(this._operation.join("")); //Making the calc of the elements
-        this._operation = [result, lastOperator]; //Inputing the last operator and the result
+
+        if (last == '%') {
+            result /= 100;
+            this._operation = [result]; 
+        } else {
+            this._operation = [result]; //Inputing the the result
+
+            if(last){ 
+                this._operation.push(last);
+            }
+
+        }
+
         this.setLastNumberToDisplay(result);
 
     }
@@ -86,10 +105,14 @@ class CalcController {
         let lastNumber;
 
         for (let i = this._operation.length - 1; i >= 0; i--) { //Going through the array to take the numbers
-            if(!this.isOperator(this._operation[i])){ //If is not a operator...
+            if (!this.isOperator(this._operation[i])) { //If is not a operator...
                 lastNumber = this._operation[i];
                 break;
             }
+        }
+
+        if(!lastNumber) {
+            lastNumber = 0;
         }
 
         this.displayCalc = lastNumber;
@@ -153,7 +176,7 @@ class CalcController {
                 this.addOperation('%');
                 break;
             case 'igual':
-
+                this.calc();
                 break;
             case 'ponto':
                 this.addOperation('.');
