@@ -3,6 +3,7 @@ class CalcController {
     constructor() {
 
         /* Attributes */
+        this._operation = []; //Array of operations
         this._locale = 'pt-BR';
         /* Selecting the display features */
         this._displayCalcEl = document.querySelector("#display"); // El = Element
@@ -27,14 +28,79 @@ class CalcController {
 
     }
 
-    addEventListenerAll(element, events, fn){
-        
-        events.split(' ').forEach(event =>{
+    addEventListenerAll(element, events, fn) {
+
+        events.split(' ').forEach(event => {
 
             element.addEventListener(event, fn, false); //The false is to make the click count once
 
         })
 
+    }
+
+    clearAll() {
+        this._operation = []; //Restarting the array
+    }
+
+    clearEntry() {
+        this._operation.pop(); //Cleaning the last array item
+    }
+
+    addOperation(value){
+        this._operation.push(value); //Push to add in the array
+        
+        console.log(this._operation);
+
+    }
+
+    setError() {
+        this.displayCalc = "Error";
+    }
+
+    execBtn(value) {
+        switch (value) {
+            case 'ac':
+                this.clearAll();
+                break;
+            case 'ce':
+                this.clearEntry();
+                break;
+            case 'soma':
+
+                break;
+            case 'subtracao':
+
+                break;
+            case 'divisao':
+
+                break;
+            case 'multiplicacao':
+
+                break;
+            case 'porcento':
+
+                break;
+            case 'igual':
+
+                break;
+
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':
+                this.addOperation(parseInt(value));  // They do the same thing
+                break;
+
+            default:
+                this.setError();
+                break;
+        }
     }
 
     initButtonsEvents() {
@@ -43,8 +109,11 @@ class CalcController {
 
         buttons.forEach(btn => { //If I add more parameters I'll have to put it inside the ()
 
-            this.addEventListenerAll(btn, 'click drag mouseover', e => { //AddEventListenerAll its a method of the class
-                console.log(btn.className.baseVal.replace("btn-","")); //Taking the className and the baseValue and "removing" the btn (I put nothing in its place)
+            this.addEventListenerAll(btn, 'click drag', e => { //AddEventListenerAll its a method of the class
+                let textBtn = btn.className.baseVal.replace("btn-", ""); //Taking the className and the baseValue and "removing" the btn (I put nothing in its place)
+
+                this.execBtn(textBtn);
+
             });
 
             this.addEventListenerAll(btn, "mouseover mouseup mousedown", e => {
