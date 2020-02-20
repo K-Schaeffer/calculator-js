@@ -15,6 +15,7 @@ class CalcController {
         this._currentDate; // _ is the convention to "Private"
         this.initialize();
         this.initButtonsEvents();
+        this.initKeyboard();
 
     }
 
@@ -29,6 +30,50 @@ class CalcController {
         }, 1000); // ...during this. (1000ms = 1s)
 
         this.setLastNumberToDisplay();
+    }
+
+    initKeyboard() {
+
+        document.addEventListener('keyup', e => {
+
+            switch (e.key) {
+                case 'Escape':
+                    this.clearAll();
+                    break;
+                case 'Backspace':
+                    this.clearEntry();
+                    break;
+                case '+':
+                case '-':
+                case '*':
+                case '/':
+                case '%':
+                    this.addOperation(e.key);
+                    break;
+                case 'Enter':
+                case '=':
+                    this.calc();
+                    break;
+                case '.':
+                case ',':
+                    this.addDot('.');
+                    break;
+                case '0':
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                case '5':
+                case '6':
+                case '7':
+                case '8':
+                case '9':
+                    this.addOperation(parseInt(e.key));
+                    break;
+
+            }
+        });
+
     }
 
     addEventListenerAll(element, events, fn) {
@@ -186,17 +231,17 @@ class CalcController {
         this.displayCalc = "Error";
     }
 
-    addDot(){
+    addDot() {
 
         let lastOperation = this.getLastOperation();
 
-        if( typeof lastOperation == 'string' && lastOperation.split('').indexOf('.' > -1)){ //Is it a string? / Is there any dot?
+        if (typeof lastOperation == 'string' && lastOperation.split('').indexOf('.' > -1)) { //Is it a string? / Is there any dot?
             return;
         }
 
-        if(this.isOperator(lastOperation) || !lastOperation){ //If its undefined or a operation add "0.something"
+        if (this.isOperator(lastOperation) || !lastOperation) { //If its undefined or a operation add "0.something"
             this.pushOperation('0.');
-        }else{
+        } else {
             this.setLastOperation(lastOperation.toString() + '.'); //Ading the . after the last number
         }
 
