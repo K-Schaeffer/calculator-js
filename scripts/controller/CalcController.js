@@ -30,6 +30,7 @@ class CalcController {
         }, 1000); // ...during this. (1000ms = 1s)
 
         this.setLastNumberToDisplay();
+        this.pasteFromClipBoard();
     }
 
     initKeyboard() {
@@ -70,6 +71,9 @@ class CalcController {
                 case '9':
                     this.addOperation(parseInt(e.key));
                     break;
+                case 'c':
+                    if(e.ctrlKey) this.copyToClipBoard();
+                    break;
 
             }
         });
@@ -84,6 +88,33 @@ class CalcController {
 
         })
 
+    }
+
+    pasteFromClipBoard(){
+
+        document.addEventListener('paste', e => { //The paste listener which will wait for the paste action
+
+            let text =  e.clipboardData.getData('Text'); //It's not a image/binary,etc... It's a text. The clipboardData and getData are native.
+           
+            this.displayCalc = parseFloat(text); //Parsing and making it appears
+
+        });
+
+    }
+
+    copyToClipBoard(){
+
+        let input = document.createElement('input'); // Creating element in the screen
+
+        input.value = this.displayCalc; // To make the input recieve the displayCalc
+
+        document.body.appendChild(input); // Making the input part of the document body (child)
+
+        input.select(); //Selecting the input
+
+        document.execCommand("Copy"); //Executing the Windows command
+
+        input.remove(); //Removing it (Because this calculator uses SVG)
     }
 
     clearAll() {
