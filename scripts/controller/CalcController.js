@@ -52,8 +52,8 @@ class CalcController {
 
     }
 
-    setLastOperation(value){
-        this._operation[this._operation.length - 1 ] = value;
+    setLastOperation(value) {
+        this._operation[this._operation.length - 1] = value;
     }
 
     isOperator(value) {
@@ -62,32 +62,54 @@ class CalcController {
 
     }
 
-    addOperation(value) {
+    pushOperation(value) {
+        this._operation.push(value);
 
-        console.log('A', isNaN(this.getLastOperation()));
-
-        if (isNaN(this.getLastOperation())) { // To verify if is not a number so I can group the numbers
-            //String
-            if (this.isOperator(value)) {
-                //Changing operator
-                this.setLastOperation(value);
-            } else if (isNaN(value)) {
-               
-                //Other buttons (= .)
-                console.log(value);
-
-            } else {
-                // It's a number, but its likely the first in the array
-                this._operation.push(value);
-            }
-        } else {
-            //Number
-            let newValue = this.getLastOperation().toString() + value.toString(); // Grouping the numbers
-            this.setLastOperation(parseInt(newValue));
+        if (this._operation.length > 3) { //If to check the operation so I can group three values per time
+            this.calc()
         }
 
-        console.log(this._operation);
+    }
 
+    calc(){
+
+        let lastOperator = this._operation.pop(); //Removing the last one (the 4th)
+
+        let result = eval(this._operation.join("")); //Making the calc of the elements
+        this._operation = [result, lastOperator]; //Inputing the last operator and the result
+
+    }
+
+    /*setLastNumberToDisplay(){
+
+    }*/
+
+    addOperation(value) {
+
+        if (isNaN(this.getLastOperation())) { // To verify if is not a number so I can group the numbers
+            //It will be a string
+            if (this.isOperator(value)) {
+                // If is a operator: Change it
+                this.setLastOperation(value);
+            } else if (isNaN(value)) {
+                //Other buttons (= .)
+                console.log('Other thing', value);
+            } else {
+                // It's a number, but its likely the first in the array
+                this.pushOperation(value);
+            }
+        } else {
+            //If to deal with the operator in the case of the last item be a numbe (So it became a new index)
+            if (this.isOperator(value)) {
+                this.pushOperation(value);
+            } else {
+                //Number
+                let newValue = this.getLastOperation().toString() + value.toString(); // Grouping the numbers
+                this.setLastOperation(parseInt(newValue));
+
+                this.setLastNumberToDisplay();
+            }
+        }
     }
 
     setError() {
