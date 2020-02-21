@@ -178,7 +178,14 @@ class CalcController {
     }
 
     getResult() {
-        return eval(this._operation.join(""));
+        try{
+            return eval(this._operation.join(""));
+        }catch(e){
+            setTimeout(()=>{ //This setTimeout will ensure that the message will appear AFTER the chain of methods
+                this.setError();
+            }, 1);
+            console.log(e); // I kept this here so I have the possibility of see the error in the console
+        }
     }
 
     calc() {
