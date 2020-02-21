@@ -4,6 +4,8 @@ class CalcController {
 
         /* Attributes */
         this._operation = []; //Array of operations
+        this._audio = new Audio('click.mp3'); /* Audio features */
+        this._audioOnOff = false;             /*                */
         this._locale = 'pt-BR';
         this._lastOperator = '';
         this._lastNumber = '';
@@ -13,6 +15,7 @@ class CalcController {
         this._timeEl = document.querySelector("#hora");
         /* End of display features */
         this._currentDate; // _ is the convention to "Private"
+        /* Calling methods */
         this.initialize();
         this.initButtonsEvents();
         this.initKeyboard();
@@ -23,6 +26,7 @@ class CalcController {
     initialize() {
 
         this.setDisplayDateTime(); // This is here 'cause of the 1s delay in the date/time display
+        console.log("Press AC twice to activate the audio");
 
         //Execute this... 
         setInterval(() => {
@@ -31,11 +35,30 @@ class CalcController {
 
         this.setLastNumberToDisplay();
         this.pasteFromClipBoard();
+
+        document.querySelectorAll('.btn-ac').forEach(btn=>{
+            btn.addEventListener('dblclick', e=>{
+                this.toggleAudio();
+            });
+        });
+    }
+
+    toggleAudio(){
+        this._audioOnOff = !this._audioOnOff;
+    }
+
+    playAudio(){
+        if(this._audioOnOff){
+            this._audio.currentTime = 0; //It will make the audio "reset" every time, so I can press whenever I want
+            this._audio.play();          // without buging the audio
+        }
     }
 
     initKeyboard() {
 
         document.addEventListener('keyup', e => {
+
+            this.playAudio();
 
             switch (e.key) {
                 case 'Escape':
@@ -281,6 +304,9 @@ class CalcController {
     }
 
     execBtn(value) {
+
+        this.playAudio();
+
         switch (value) {
             case 'ac':
                 this.clearAll();
